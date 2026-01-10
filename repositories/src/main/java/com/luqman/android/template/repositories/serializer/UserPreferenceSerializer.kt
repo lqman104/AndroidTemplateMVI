@@ -6,6 +6,7 @@ import com.google.protobuf.InvalidProtocolBufferException
 import com.luqman.android.template.mvi.datastore.UserPreferences
 import java.io.InputStream
 import java.io.OutputStream
+import javax.inject.Inject
 
 class UserPreferenceSerializer @Inject constructor() : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
