@@ -14,6 +14,7 @@ import com.luqman.android.template.dashboard.ui.DashboardScreen
 import com.luqman.android.template.dashboard.view_model.DashboardViewModel
 import com.luqman.android.template.setting.model.SettingNav
 import com.luqman.android.template.setting.ui.SettingScreen
+import com.luqman.android.template.setting.view_model.SettingViewModel
 
 @Composable
 fun MainNavigation(
@@ -33,9 +34,13 @@ fun MainNavigation(
         }
         composable<SettingNav> {
             val settingNav = it.savedStateHandle.toRoute<SettingNav>()
+            val viewModel = hiltViewModel<SettingViewModel>()
+            val state by viewModel.state.collectAsState()
             SettingScreen(
                 Modifier,
                 notes = settingNav.notes,
+                state = state,
+                onEvent = viewModel::onEvent,
                 onBack = {
                     navController.popBackStack()
                 }
