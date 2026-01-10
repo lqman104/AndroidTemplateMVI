@@ -1,5 +1,6 @@
 package com.luqman.android.template.setting.view_model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luqman.android.template.setting.use_case.GetUserUseCase
@@ -40,19 +41,30 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun onNameChange(value: String) {
-        _state.value = _state.value.copy(name = value)
+        _state.update { state ->
+            state.copy(name = value)
+        }
     }
 
     private fun onTitleChange(value: String) {
-        _state.value = _state.value.copy(title = value)
+        _state.update { state ->
+            state.copy(title = value)
+        }
     }
 
     private fun save() {
         viewModelScope.launch {
-            saveUserUseCase(
-                name = state.value.name.orEmpty(),
-                title = state.value.title.orEmpty()
-            )
+            try {
+                saveUserUseCase(
+                    name = state.value.name.orEmpty(),
+                    title = state.value.title.orEmpty()
+                )
+                _state.update { state ->
+                    state.copy(saved = true)
+                }
+            } catch (e: Exception) {
+                Log.e("save: ", e.message, e)
+            }
         }
     }
 }

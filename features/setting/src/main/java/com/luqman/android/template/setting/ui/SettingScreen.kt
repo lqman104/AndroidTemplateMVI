@@ -38,6 +38,12 @@ fun SettingScreen(
         onEvent(SettingEvent.GetData)
     }
 
+    LaunchedEffect(state.saved) {
+        if (state.saved) {
+            onBack()
+        }
+    }
+
     Scaffold(modifier, topBar = {
         TopAppBar(title = { Text("Setting") }, navigationIcon = {
             IconButton(onClick = onBack) {

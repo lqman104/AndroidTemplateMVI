@@ -2,7 +2,8 @@ package com.luqman.android.template.setting.view_model
 
 data class SettingState(
     val name: String? = null,
-    val title: String? = null
+    val title: String? = null,
+    val saved: Boolean = false
 )
 
 sealed interface SettingEvent {
