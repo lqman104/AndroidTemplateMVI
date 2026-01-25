@@ -1,27 +1,32 @@
 package com.luqman.android.template.repositories.user
 
+import android.util.Log
 import androidx.datastore.core.DataStore
-import com.luqman.android.template.core.network.client.AppHttpClient
 import com.luqman.android.template.mvi.datastore.UserPreferences
 import com.luqman.android.template.mvi.datastore.copy
-import com.luqman.android.template.repositories.models.User
-import kotlinx.coroutines.flow.Flow
+import com.luqman.android.template.repositories.service.user.UserApiService
+import com.luqman.android.template.repositories.service.user.response.UserResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface UserRepository {
+    suspend fun fetchUser(): Result<UserResponse>
+    suspend fun saveUser(name: String, title: String)
+}
+
 @Singleton
-class UserRepository @Inject constructor(
-    private val httpClient: AppHttpClient,
+class UserRepositoryImpl @Inject constructor(
+    private val userApiService: UserApiService,
     private val dataStore: DataStore<UserPreferences>
-) {
+): UserRepository {
 
-    suspend fun getUser(): Flow<User> {
-
-        val users = httpClient.get<User>(url = "",)
-        return htt
+    override suspend fun fetchUser() = runCatching {
+        val result = userApiService.getUsers()
+        Log.d("result", "fetchUser: $result")
+        return@runCatching result
     }
 
-    suspend fun saveUser(name: String, title: String) {
+    override suspend fun saveUser(name: String, title: String) {
         dataStore.updateData { userPreferences ->
             userPreferences.copy {
                 this.title = title
@@ -29,5 +34,4 @@ class UserRepository @Inject constructor(
             }
         }
     }
-
 }

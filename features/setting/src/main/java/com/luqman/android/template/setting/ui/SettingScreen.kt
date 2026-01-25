@@ -33,11 +33,6 @@ fun SettingScreen(
     onEvent: (SettingEvent) -> Unit = {},
     onBack: () -> Unit = {}
 ) {
-
-    LaunchedEffect(Unit) {
-        onEvent(SettingEvent.GetData)
-    }
-
     LaunchedEffect(state.saved) {
         if (state.saved) {
             onBack()

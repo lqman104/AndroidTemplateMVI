@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlin.serialization)
+    implementation(libs.ktor.client.core)
     implementation(libs.datastore)
     implementation(libs.protobuf)
     implementation(libs.material)

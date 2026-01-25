@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +25,11 @@ fun DashboardScreen(
     onEvent: (DashboardEvent) -> Unit = {},
     goToSetting: () -> Unit = {}
 ) {
+
+    LaunchedEffect(Unit) {
+        onEvent(DashboardEvent.GetData)
+    }
+
     Scaffold(modifier) { paddingValues ->
         Column(
             modifier = Modifier
@@ -31,13 +38,13 @@ fun DashboardScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
-                value = state.notes,
-                onValueChange = {
-                    onEvent(DashboardEvent.OnNoteChange(it))
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(state.users.orEmpty()) { user ->
+                    Text(user.name)
+                    Text(user.email)
                 }
-            )
-            Text(state.notes)
+            }
+
             Button(
                 onClick = goToSetting
             ) {

@@ -3,7 +3,6 @@ package com.luqman.android.template.setting.view_model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.luqman.android.template.setting.use_case.GetUserUseCase
 import com.luqman.android.template.setting.use_case.SaveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
     private val saveUserUseCase: SaveUserUseCase
 ) : ViewModel() {
 
@@ -23,20 +21,9 @@ class SettingViewModel @Inject constructor(
 
     fun onEvent(event: SettingEvent) {
         when (event) {
-            is SettingEvent.GetData -> onGetData()
             is SettingEvent.OnNameChange -> onNameChange(event.value)
             is SettingEvent.OnTitleChange -> onTitleChange(event.value)
             is SettingEvent.OnSave -> save()
-        }
-    }
-
-    private fun onGetData() {
-        viewModelScope.launch {
-            getUserUseCase().collect { data ->
-                _state.update { state ->
-                    state.copy(name = data.name, title = data.title)
-                }
-            }
         }
     }
 
